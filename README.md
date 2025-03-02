@@ -1,7 +1,7 @@
 # 🤖 AI Chatbot
 
 ### Built by Muhammad Ahmed ✨
-    A modern and interactive AI chatbot designed for intelligent conversations, featuring an attractive UI and smooth performance.
+A modern and interactive AI chatbot designed for intelligent conversations, featuring an attractive UI and smooth performance.
 
 ---
 
@@ -41,15 +41,15 @@ streamlit run main.py
 ```
 
 # 🖥️ **Modern Chat UI:**
-    - Smooth animations
-    - Clean message bubbles
-    - User-friendly interface
+- Smooth animations
+- Clean message bubbles
+- User-friendly interface
 
 ## 🔮 Future Enhancements
-    - 🌎 Multi-language support
-    - 🗂️ Save and load chat history
-    - 🎙️ Voice input & output
-    - 📱 Mobile-friendly UI
+- 🌎 Multi-language support
+- 🗂️ Save and load chat history
+- 🎙️ Voice input & output
+- 📱 Mobile-friendly UI
 
 ## 🤝 Contributing
 Feel free to contribute to this project by submitting issues or pull requests. Let's build something amazing together! 🚀
