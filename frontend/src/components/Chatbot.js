@@ -23,17 +23,17 @@ function Chatbot() {
   // Send message to backend
   const sendMessage = async () => {
     if (!input.trim()) return;
-
+  
     const userMessage = { role: "user", content: input };
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setBotTyping(true);
-
+  
     try {
       const response = await axios.post("http://127.0.0.1:8000/chat", {
         messages: [...messages, userMessage],
       });
-
+  
       const botReply = response.data.response || "I'm here to help!";
       simulateTyping(botReply); // Use only the valid response
     } catch (error) {
@@ -45,7 +45,7 @@ function Chatbot() {
       setBotTyping(false);
     }
   };
-
+  
 
   // Simulate typing effect
   const simulateTyping = (text) => {

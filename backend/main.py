@@ -1,46 +1,56 @@
+import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import openai
 import os
 from dotenv import load_dotenv
 
-# Load API Key from .env
+# Load API Key
 load_dotenv()
 api_key = os.getenv("RAG_KEY")
 
-# Initialize OpenAI Client
-client = openai.OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=api_key
-)
+if not api_key:
+    raise ValueError("❌ ERROR: API Key is missing from .env file")
 
-# Initialize FastAPI App
+# Initialize FastAPI app
 app = FastAPI()
 
 # Enable CORS (Frontend <-> Backend Communication)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Change this to your frontend URL in production
+    allow_origins=["*"],  
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Define Request Body Format
+# Define request body format
 class ChatRequest(BaseModel):
     messages: list
+
+# Define headers with API key
+HEADERS = {
+    "Authorization": f"Bearer {api_key}",
+    "Content-Type": "application/json"
+}
 
 @app.post("/chat")
 async def chat(request: ChatRequest):
     try:
-        print("Received messages:", request.messages)  # Debugging
-        response = client.chat.completions.create(
-            model="mistralai/mistral-7b-instruct",  # Best model for conversation
-            messages=request.messages,
-            temperature=0.7
-        )
-        return {"response": response.choices[0].message.content.strip()}
+        payload = {
+            "model": "deepseek/deepseek-chat:free",
+            "messages": request.messages,
+            "temperature": 0.7
+        }
+        response = requests.post("https://openrouter.ai/api/v1/chat/completions", 
+                                 headers=HEADERS, json=payload)
+        response_json = response.json()
+
+        if response.status_code == 401:
+            return {"error": "Unauthorized. Check API Key."}
+
+        return {"response": response_json["choices"][0]["message"]["content"].strip()}
+    
     except Exception as e:
         return {"error": str(e)}
-
+print(f"🔑 API Key Loaded: {api_key}")

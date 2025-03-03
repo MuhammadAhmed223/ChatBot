@@ -1,3 +1,16 @@
+body {
+    margin: 0;
+    font-family: var(--bs-body-font-family);
+    font-size: var(--bs-body-font-size);
+    font-weight: var(--bs-body-font-weight);
+    line-height: var(--bs-body-line-height);
+    color: var(--bs-body-color);
+    text-align: var(--bs-body-text-align);
+    background-color: rgb(33, 37, 41) !important; /* ✅ Force apply dark background */
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+}
+
 /* General Chatbot Styles */
 .chat-container {
     width: 400px;
@@ -10,6 +23,11 @@
     margin: 50px auto;
     font-family: Arial, sans-serif;
   }
+
+  .chat-container {
+    background-color: transparent !important; /* ✅ Removes any unwanted white box */
+}
+
   
   /* Chat Header */
   .chat-header {
