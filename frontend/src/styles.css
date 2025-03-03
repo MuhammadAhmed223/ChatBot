@@ -12,8 +12,7 @@ body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* General Chatbot Styles */
-/* General Chatbot Styles */
+/* Chatbot Container */
 .chat-container {
     width: 400px;
     height: 550px;
@@ -25,10 +24,6 @@ body {
     margin: 50px auto;
     font-family: Arial, sans-serif;
 }
-
-
-
-
 
 /* Chat Header */
 .chat-header {
@@ -47,7 +42,7 @@ body {
     flex-grow: 1;
     padding: 10px;
     overflow-y: auto;
-    background: #fefcfc;
+    background: #fff;
     display: flex;
     flex-direction: column;
 }
@@ -59,45 +54,126 @@ body {
     padding: 8px 12px;
     border-radius: 10px;
     font-size: 14px;
+    animation: popUp 0.3s ease-in-out;
 }
 
+/* Bot Heading */
+.bot-heading {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #222;
+}
 
 /* User Message */
 .user {
     background: #007bff;
     color: white;
     align-self: flex-end;
+    border-radius: 10px 10px 0 10px;
 }
 
 /* Bot Message */
 .bot {
     background: #5b5b5b;
-    color: rgb(255, 255, 255);
+    color: white;
     align-self: flex-start;
+    border-radius: 10px 10px 10px 0;
 }
 
+/* Code Block */
+.code-container {
+    background: #282c34;
+    color: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+    position: relative;
+    overflow-x: auto;
+    max-width: 100%;
+}
+
+pre {
+    white-space: pre-wrap;
+    overflow-x: auto;
+    margin: 0;
+}
+
+code {
+    font-family: "Courier New", monospace;
+    font-size: 14px;
+}
+
+/* Copy Button */
+.copy-btn {
+    background: transparent;
+    color: #ddd;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    transition: color 0.2s ease-in-out;
+}
+
+.copy-btn:hover {
+    color: #fff;
+}
+
+/* Copy Chat Button */
+.copy-chat-btn {
+    background: #28a745;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin: 10px auto;
+    width: 90%;
+}
+
+.copy-chat-btn:hover {
+    background: #218838;
+}
 
 /* Typing Animation */
 .typing-animation {
     font-style: italic;
     color: #888;
+    font-size: 14px;
+    margin-top: 5px;
 }
 
-/* Input Box */
+/* Pop-Up Animation */
+@keyframes popUp {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 .input-container {
     display: flex;
     padding: 10px;
-    background: white;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    background: #fff;
+    border-top: 1px solid #ddd;
 }
 
 .input-box {
-    flex: 1;
+    flex-grow: 1;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 8px;
     font-size: 14px;
+    outline: none;
 }
 
 .send-button {
@@ -105,9 +181,11 @@ body {
     color: white;
     border: none;
     padding: 10px 15px;
-    margin-left: 5px;
-    border-radius: 5px;
+    border-radius: 8px;
+    font-size: 14px;
     cursor: pointer;
+    margin-left: 10px;
+    transition: background 0.2s ease-in-out;
 }
 
 .send-button:hover {
