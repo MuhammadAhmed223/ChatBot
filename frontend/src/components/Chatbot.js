@@ -27,61 +27,60 @@ function Chatbot() {
     if (!input.trim()) return;
   
     const userMessage = { role: "user", content: input };
+  
+    // Update state immediately to show user message
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setBotTyping(true);
   
     try {
-      const response = await axios.post(`${API_URL}/chat`, {
-        messages: [...messages, userMessage],
-      });
-  
-      let botReply = response.data.response;
+      const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
       
-      // Ensure the response is a valid string
-      if (!botReply || typeof botReply !== "string") {
-        botReply = "I'm here to help!";
-      }
+      // Use the updated state correctly inside the request
+      const updatedMessages = [...messages, userMessage];
+      
+      const response = await axios.post(`${API_URL}/chat`, { messages: updatedMessages });
   
-      simulateTyping(botReply.trim());  // Trim to avoid extra spaces or "undefined"
+      const botReply = response.data.response || "I'm here to help!";
+      
+      // Ensure only one bot message is added
+      setMessages((prev) => [...prev, { role: "bot", content: botReply }]);
     } catch (error) {
       console.error("Error sending message:", error);
-      setMessages((prev) => [
-        ...prev,
-        { role: "bot", content: "Oops! Something went wrong. Try again." },
-      ]);
+      setMessages((prev) => [...prev, { role: "bot", content: "Oops! Something went wrong. Try again." }]);
+    } finally {
       setBotTyping(false);
     }
   };
   
+  
+  
 
   // Simulate typing effect
   const simulateTyping = (text) => {
-    if (!text || typeof text !== "string") return;  // Prevent undefined input
+    if (!text || typeof text !== "string") return; // Ensure text is valid
+  
     let index = 0;
+    let newMessage = "";
+  
     setBotTyping(true);
   
     const interval = setInterval(() => {
-      setMessages((prev) => {
-        const lastMessage = prev[prev.length - 1];
-  
-        if (lastMessage && lastMessage.role === "bot") {
-          return [
-            ...prev.slice(0, -1),
-            { role: "bot", content: lastMessage.content + text[index] },
-          ];
-        } else {
-          return [...prev, { role: "bot", content: text[index] }];
-        }
-      });
-  
-      index++;
-      if (index >= text.length) {
+      if (index < text.length) {
+        newMessage += text[index];
+        setMessages((prev) => [
+          ...prev.slice(0, -1),
+          { role: "bot", content: newMessage },
+        ]);
+        index++;
+      } else {
         clearInterval(interval);
         setBotTyping(false);
       }
     }, 50);
   };
+  
+  
   
 
   return (
