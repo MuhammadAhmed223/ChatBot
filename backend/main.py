@@ -1,18 +1,18 @@
+import os
 import requests
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import os
 from dotenv import load_dotenv
 
-# Load API Key
+# Load API Key from .env
 load_dotenv()
 api_key = os.getenv("RAG_KEY")
 
 if not api_key:
     raise ValueError("❌ ERROR: API Key is missing from .env file")
 
-# Initialize FastAPI app
+# Initialize FastAPI App
 app = FastAPI()
 
 # Enable CORS (Frontend <-> Backend Communication)
@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Define request body format
+# Define Request Body Format
 class ChatRequest(BaseModel):
     messages: list
 
@@ -53,4 +53,5 @@ async def chat(request: ChatRequest):
     
     except Exception as e:
         return {"error": str(e)}
+
 print(f"🔑 API Key Loaded: {api_key}")

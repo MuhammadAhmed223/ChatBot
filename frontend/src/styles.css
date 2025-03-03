@@ -6,31 +6,32 @@ body {
     line-height: var(--bs-body-line-height);
     color: var(--bs-body-color);
     text-align: var(--bs-body-text-align);
-    background-color: rgb(33, 37, 41) !important; /* ✅ Force apply dark background */
+    background-color: rgb(33, 37, 41) !important;
+    /* ✅ Force apply dark background */
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
 }
 
 /* General Chatbot Styles */
+/* General Chatbot Styles */
 .chat-container {
     width: 400px;
     height: 550px;
-    background: white;
+    background: #f8f6f6;
     border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     display: flex;
     flex-direction: column;
     margin: 50px auto;
     font-family: Arial, sans-serif;
-  }
-
-  .chat-container {
-    background-color: transparent !important; /* ✅ Removes any unwanted white box */
 }
 
-  
-  /* Chat Header */
-  .chat-header {
+
+
+
+
+/* Chat Header */
+.chat-header {
     background: #007bff;
     color: white;
     padding: 10px;
@@ -39,65 +40,67 @@ body {
     font-weight: bold;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-  }
-  
-  /* Chat Box */
-  .chat-box {
+}
+
+/* Chat Box */
+.chat-box {
     flex-grow: 1;
     padding: 10px;
     overflow-y: auto;
-    background: #f7f7f7;
+    background: #fefcfc;
     display: flex;
     flex-direction: column;
-  }
-  
-  /* Message Styles */
-  .message {
+}
+
+/* Message Styles */
+.message {
     max-width: 80%;
     margin-bottom: 10px;
     padding: 8px 12px;
     border-radius: 10px;
     font-size: 14px;
-  }
-  
-  /* User Message */
-  .user {
+}
+
+
+/* User Message */
+.user {
     background: #007bff;
     color: white;
     align-self: flex-end;
-  }
-  
-  /* Bot Message */
-  .bot {
-    background: #e3e3e3;
-    color: black;
+}
+
+/* Bot Message */
+.bot {
+    background: #5b5b5b;
+    color: rgb(255, 255, 255);
     align-self: flex-start;
-  }
-  
-  /* Typing Animation */
-  .typing-animation {
+}
+
+
+/* Typing Animation */
+.typing-animation {
     font-style: italic;
     color: #888;
-  }
-  
-  /* Input Box */
-  .input-container {
+}
+
+/* Input Box */
+.input-container {
     display: flex;
     padding: 10px;
     background: white;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
-  }
-  
-  .input-box {
+}
+
+.input-box {
     flex: 1;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 14px;
-  }
-  
-  .send-button {
+}
+
+.send-button {
     background: #007bff;
     color: white;
     border: none;
@@ -105,9 +108,8 @@ body {
     margin-left: 5px;
     border-radius: 5px;
     cursor: pointer;
-  }
-  
-  .send-button:hover {
+}
+
+.send-button:hover {
     background: #0056b3;
-  }
-  
+}

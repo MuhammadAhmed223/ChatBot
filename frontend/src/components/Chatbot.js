@@ -10,6 +10,8 @@ function Chatbot() {
   const [botTyping, setBotTyping] = useState(false);
   const chatBoxRef = useRef(null);
 
+  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
+
   // Auto-scroll when messages update
   useEffect(() => {
     if (chatBoxRef.current) {
@@ -30,12 +32,18 @@ function Chatbot() {
     setBotTyping(true);
   
     try {
-      const response = await axios.post("http://127.0.0.1:8000/chat", {
+      const response = await axios.post(`${API_URL}/chat`, {
         messages: [...messages, userMessage],
       });
   
-      const botReply = response.data.response || "I'm here to help!";
-      simulateTyping(botReply); // Use only the valid response
+      let botReply = response.data.response;
+      
+      // Ensure the response is a valid string
+      if (!botReply || typeof botReply !== "string") {
+        botReply = "I'm here to help!";
+      }
+  
+      simulateTyping(botReply.trim());  // Trim to avoid extra spaces or "undefined"
     } catch (error) {
       console.error("Error sending message:", error);
       setMessages((prev) => [
@@ -49,13 +57,14 @@ function Chatbot() {
 
   // Simulate typing effect
   const simulateTyping = (text) => {
+    if (!text || typeof text !== "string") return;  // Prevent undefined input
     let index = 0;
     setBotTyping(true);
-
+  
     const interval = setInterval(() => {
       setMessages((prev) => {
         const lastMessage = prev[prev.length - 1];
-
+  
         if (lastMessage && lastMessage.role === "bot") {
           return [
             ...prev.slice(0, -1),
@@ -65,7 +74,7 @@ function Chatbot() {
           return [...prev, { role: "bot", content: text[index] }];
         }
       });
-
+  
       index++;
       if (index >= text.length) {
         clearInterval(interval);
@@ -73,6 +82,7 @@ function Chatbot() {
       }
     }, 50);
   };
+  
 
   return (
     <div className="chat-container">
