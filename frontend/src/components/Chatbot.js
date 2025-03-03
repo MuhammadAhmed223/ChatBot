@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import "../styles.css"; // Ensure this contains the latest styles
+import "../styles.css";
 
 function Chatbot() {
   const [messages, setMessages] = useState([
@@ -9,8 +9,6 @@ function Chatbot() {
   const [input, setInput] = useState("");
   const [botTyping, setBotTyping] = useState(false);
   const chatBoxRef = useRef(null);
-
-  const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
 
   // Auto-scroll when messages update
   useEffect(() => {
@@ -27,51 +25,53 @@ function Chatbot() {
     if (!input.trim()) return;
   
     const userMessage = { role: "user", content: input };
-  
-    // Update state immediately to show user message
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]); // Add user message to chat
     setInput("");
     setBotTyping(true);
   
     try {
       const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
       
-      // Use the updated state correctly inside the request
-      const updatedMessages = [...messages, userMessage];
-      
-      const response = await axios.post(`${API_URL}/chat`, { messages: updatedMessages });
+      const response = await axios.post(`${API_URL}/chat`, {
+        messages: [...messages, userMessage], // Send correct conversation context
+      });
   
-      const botReply = response.data.response || "I'm here to help!";
-      
-      // Ensure only one bot message is added
-      setMessages((prev) => [...prev, { role: "bot", content: botReply }]);
+      const botReply = response.data.response?.trim() || "I'm here to help!";
+  
+      simulateTyping(botReply); // Call only once to prevent duplicates
     } catch (error) {
       console.error("Error sending message:", error);
-      setMessages((prev) => [...prev, { role: "bot", content: "Oops! Something went wrong. Try again." }]);
-    } finally {
+      setMessages((prev) => [
+        ...prev,
+        { role: "bot", content: "Oops! Something went wrong. Try again." },
+      ]);
       setBotTyping(false);
     }
   };
   
-  
-  
 
   // Simulate typing effect
   const simulateTyping = (text) => {
-    if (!text || typeof text !== "string") return; // Ensure text is valid
+    if (!text || typeof text !== "string") return;
   
     let index = 0;
     let newMessage = "";
   
+    setMessages((prev) => [...prev, { role: "bot", content: "" }]); // Start with empty message
     setBotTyping(true);
   
     const interval = setInterval(() => {
       if (index < text.length) {
         newMessage += text[index];
-        setMessages((prev) => [
-          ...prev.slice(0, -1),
-          { role: "bot", content: newMessage },
-        ]);
+        setMessages((prev) => {
+          const lastMessage = prev[prev.length - 1];
+  
+          if (lastMessage && lastMessage.role === "bot") {
+            return [...prev.slice(0, -1), { role: "bot", content: newMessage }];
+          }
+          return prev;
+        });
+  
         index++;
       } else {
         clearInterval(interval);
@@ -79,7 +79,6 @@ function Chatbot() {
       }
     }, 50);
   };
-  
   
   
 
@@ -92,10 +91,7 @@ function Chatbot() {
       {/* Chat Messages */}
       <div ref={chatBoxRef} className="chat-box">
         {messages.map((msg, index) => (
-          <div
-            key={index}
-            className={`message ${msg.role === "user" ? "user" : "bot"}`}
-          >
+          <div key={index} className={`message ${msg.role === "user" ? "user" : "bot"}`}>
             <strong>{msg.role === "user" ? "You: " : "Bot: "}</strong>{" "}
             {msg.content}
           </div>
