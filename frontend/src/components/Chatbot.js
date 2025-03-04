@@ -25,25 +25,28 @@ function Chatbot() {
   const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
 
   // Format messages with basic Markdown support
+  // Updated formatMessage function
   const formatMessage = (text) => {
-    // Convert `# Heading` to <h1>Heading</h1>
-    text = text.replace(/^# (.*$)/gm, "<h1>$1</h1>");
+    // Convert Markdown-style headings
+    text = text.replace(/^### (.*$)/gm, '<h3 class="markdown-heading">$1</h3>');
+    text = text.replace(/^## (.*$)/gm, '<h2 class="markdown-heading">$1</h2>');
+    text = text.replace(/^# (.*$)/gm, '<h1 class="markdown-heading">$1</h1>');
 
-    // Convert `## Subheading` to <h2>Subheading</h2>
-    text = text.replace(/^## (.*$)/gm, "<h2>$1</h2>");
-
-    // Convert inline code (`code`) inside single backticks
+    // Convert inline code (`code`)
     text = text.replace(/`([^`]+)`/g, `<code class="inline-code">$1</code>`);
 
     // Convert code blocks (```js ... ```)
     text = text.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
       const highlightedCode = hljs.highlightAuto(code).value;
-      return `<pre><code class="hljs">${highlightedCode}</code></pre>
-              <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${code}\`)">Copy</button>`;
+      return `<div class="code-container">
+              <pre><code class="hljs">${highlightedCode}</code></pre>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${code}\`)">Copy</button>
+            </div>`;
     });
 
     return text;
   };
+
 
   // Send message to backend
   const sendMessage = async () => {

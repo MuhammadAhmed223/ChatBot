@@ -93,18 +93,17 @@ body {
     border-radius: 10px 10px 10px 0;
 }
 
-/* Code Block */
+/* Code Blocks */
 .code-container {
     background: #282c34;
     color: #fff;
-    padding: 14px;
+    padding: 12px;
     border-radius: 8px;
     font-family: "Courier New", monospace;
     font-size: 14px;
     position: relative;
     overflow-x: auto;
     max-width: 100%;
-    line-height: 1.5;
 }
 
 pre {
@@ -123,12 +122,12 @@ code {
     background: transparent;
     color: #ddd;
     border: none;
-    padding: 6px;
+    padding: 5px;
     cursor: pointer;
     font-size: 14px;
     position: absolute;
-    top: 6px;
-    right: 6px;
+    top: 5px;
+    right: 5px;
     transition: color 0.2s ease-in-out;
 }
 
@@ -214,4 +213,36 @@ code {
 .send-button:hover {
     background: #0056b3;
     transform: scale(1.05);
+}
+
+/* Markdown Headings */
+.markdown-heading {
+    font-weight: bold;
+    color: #fff;
+    margin-bottom: 8px;
+}
+
+h1.markdown-heading {
+    font-size: 22px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+}
+
+h2.markdown-heading {
+    font-size: 20px;
+    border-bottom: 1px solid #007bff;
+    padding-bottom: 4px;
+}
+
+h3.markdown-heading {
+    font-size: 18px;
+}
+
+/* Inline Code */
+.inline-code {
+    background: rgba(0, 0, 0, 0.1);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "Courier New", monospace;
+    color: #fff;
 }
