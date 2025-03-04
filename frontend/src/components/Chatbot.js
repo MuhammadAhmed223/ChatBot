@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "../styles.css";
+import hljs from "highlight.js";
+import "highlight.js/styles/github.css"; // Choose any style you like
 
 function Chatbot() {
   const [messages, setMessages] = useState([
@@ -20,9 +22,28 @@ function Chatbot() {
     }
   }, [messages, botTyping]);
 
-  // ✅ Fix: Vite Compatibility for API URL
   const API_URL = process.env.REACT_APP_API_URL || "http://127.0.0.1:8000";
 
+  // Format messages with basic Markdown support
+  const formatMessage = (text) => {
+    // Convert `# Heading` to <h1>Heading</h1>
+    text = text.replace(/^# (.*$)/gm, "<h1>$1</h1>");
+
+    // Convert `## Subheading` to <h2>Subheading</h2>
+    text = text.replace(/^## (.*$)/gm, "<h2>$1</h2>");
+
+    // Convert inline code (`code`) inside single backticks
+    text = text.replace(/`([^`]+)`/g, `<code class="inline-code">$1</code>`);
+
+    // Convert code blocks (```js ... ```)
+    text = text.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
+      const highlightedCode = hljs.highlightAuto(code).value;
+      return `<pre><code class="hljs">${highlightedCode}</code></pre>
+              <button class="copy-btn" onclick="navigator.clipboard.writeText(\`${code}\`)">Copy</button>`;
+    });
+
+    return text;
+  };
 
   // Send message to backend
   const sendMessage = async () => {
@@ -30,12 +51,7 @@ function Chatbot() {
 
     const userMessage = { role: "user", content: input };
 
-    // ✅ Fix: Ensure messages state updates correctly
-    setMessages((prev) => {
-      const newMessages = [...prev, userMessage];
-      return newMessages;
-    });
-
+    setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setBotTyping(true);
 
@@ -46,7 +62,6 @@ function Chatbot() {
 
       const botReply = response.data.response?.trim() || "I'm here to help!";
 
-      // ✅ Fix: Add small delay to bot typing for a smoother effect
       setTimeout(() => {
         setMessages((prev) => [...prev, { role: "bot", content: botReply }]);
         setBotTyping(false);
@@ -81,7 +96,7 @@ function Chatbot() {
         {messages.map((msg, index) => (
           <div key={index} className={`message ${msg.role}`}>
             {msg.role === "bot" && <h5 className="bot-heading">Chatbot Response:</h5>}
-            {msg.content}
+            <div dangerouslySetInnerHTML={{ __html: formatMessage(msg.content) }} />
           </div>
         ))}
         {botTyping && <div className="typing-animation">...</div>}
